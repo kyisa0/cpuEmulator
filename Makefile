@@ -9,6 +9,6 @@ asm.exe:
 	gcc src/assembler/assembler.c -o asm.exe
 
 
-libexec.dll
+libexec.dll:
 	gcc src/emulator/libexec.c -o libexec.dll -shared
 
