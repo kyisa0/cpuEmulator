@@ -1,13 +1,14 @@
 all:emulator.exe:asm.exe
 
+
+
 emulator.exe:libexec.dll
-	gcc emulator.c -o emulator.exe -L. -lexec
+	gcc src/emulator/emulator.c -o emulator.exe -Lsrc/emulator -lexec
 
-libexec.dll:
-	gcc libexec.c -c -o libexec.o
-	gcc libexec.o -shared -o libexec.dll
-
-clean:
-	rm libexec.o libexec.dll emulator.exe
 asm.exe:
-	gcc assembler.c -o asm.exe
+	gcc src/assembler/assembler.c -o asm.exe
+
+
+libexec.dll
+	gcc src/emulator/libexec.c -o libexec.dll -shared
+
