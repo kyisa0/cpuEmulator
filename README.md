@@ -17,12 +17,14 @@ Program Counter, Max addressable rom: 256 bytes
 
     TODO:
   
-      ●Write the assembler
+      ● Write the assembler
   
-      ●Bugfix
+      ● Bugfix
   
-      ●Debug terminal
+      ● Terminal window for terminal buffer
   
-      ●Terminal window for terminal buffer
-  
-      ●Memory handling
+      ● Memory handling
+
+      ● Memory Layout
+
+      ● GUI for emulator screen
