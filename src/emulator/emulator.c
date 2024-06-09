@@ -28,7 +28,7 @@
 
 // Registers
 uint8_t GP[6]={0, 0, 0, 0, 0, 0};// general purpose registers
-uint8_t RO=0; // read only registers
+uint8_t RO=0; // flag registers
 uint8_t A=0; // accumulator register
 
 
@@ -52,8 +52,8 @@ void reset()
     PC=0;
     memset(RAM, 0, 256);
     memset(GP, 0, 6);
-    RO=0;
-    A=0;
+    RO=0; //flag register
+    A=0; //accumulator register
 }
 
 int main(int argc, char *argv[])
@@ -79,12 +79,14 @@ int main(int argc, char *argv[])
                 PC++;
                 instr=readInstruction();// read register number
                 A=A&GP[instr];
+                printf("And result of: %u\n", A);
                 PC++;
                 break;
             case 0x02: // LDA load Accumulator with value on the memory address
                 PC++;
                 instr=readInstruction();// read memory address
                 A=RAM[instr];
+                printf("Value %u loaded to A register.\n", A);
                 PC++;
                 break;
             case 0x03:// LDR load gp register with value on the memory address
@@ -94,6 +96,7 @@ int main(int argc, char *argv[])
                 PC++;
                 instr=readInstruction();// read memory address
                 GP[reg_num]=RAM[instr];
+                printf("Value %u loaded to register %u\n", GP[reg_num], reg_num);
                 PC++;
                 break;
             case 0x04:// LDI load gp register with I value
@@ -103,6 +106,7 @@ int main(int argc, char *argv[])
                 PC++;
                 instr=readInstruction();// read I value
                 GP[reg_num]=instr;
+                printf("immediate value %u loaded to register %u\n", instr, reg_num);
                 PC++;
                 break;
             case 0x05: //STA store value on accumulator to memory
@@ -110,6 +114,7 @@ int main(int argc, char *argv[])
                 instr=readInstruction(); // read memory address
                 RAM[instr]=A;
                 PC++;
+                printf("value %u stored to ram address %u\n", A, instr);
                 break;
             case 0x06:// STR store value on GP register to memory
                 PC++;
@@ -118,6 +123,7 @@ int main(int argc, char *argv[])
                 PC++;
                 instr=readInstruction();// read memory address
                 RAM[instr]=GP[reg_num];
+                printf("Value %u stored to ram address %u\n", GP[reg_num], instr);
                 PC++;
                 break;
             case 0x07:// or with Accumulator
@@ -125,11 +131,13 @@ int main(int argc, char *argv[])
                 instr=readInstruction(); // read register number
                 A=A|GP[instr];
                 PC++;
+                printf("Result of OR is %u\n", A);
                 break;
             case 0x08:// XOR with accumulator
                 PC++;
                 instr=readInstruction();// read register number
                 A=A^GP[instr];
+                printf("result of xor is %u\n", A);
                 PC++;
                 break;
             case 0x09:// Subtract with accumulator
@@ -137,6 +145,7 @@ int main(int argc, char *argv[])
                 instr=readInstruction();// read register number
                 if((A-GP[instr])<0) setcarry();
                 A=A-GP[instr];
+                printf("Result of subtraction is %u\n", A);
                 PC++;
                 break;
             case 0x0A:// Add with accumulator 
@@ -144,12 +153,14 @@ int main(int argc, char *argv[])
                 instr=readInstruction();// read register number
                 if((A+GP[instr])>255) setcarry();
                 A=A+GP[instr];
+                printf("Result of add is %u\n", A);
                 PC++;
                 break;
             case 0x0B://Divide with accumulator
                 PC++;
                 instr=readInstruction();// read register number
                 A=A/GP[instr];
+                printf("Result of divide is %u\n", A);
                 PC++;
                 break;
             case 0x0C:// Multiply with accumulator
@@ -157,30 +168,35 @@ int main(int argc, char *argv[])
                 instr=readInstruction();// read register number
                 if((A+GP[instr])>255) setcarry();
                 A=A*GP[instr];
+                printf("Result of multiply is %u\n", A);
                 PC++;
                 break;
             case 0x00:// NOP instruction
                 PC++;
+                printf("NOP\n");
                 break;
             case 0x0E:// reverse register (NOT)
                 PC++;
                 instr=readInstruction();
                 GP[instr]=~GP[instr];
+                printf("A register reversed\n");
                 PC++;
                 break;
             case 0x0F:// JMPR jump to memory address in a register
                 PC++;
                 instr=readInstruction();
                 PC=(GP[instr]);
+                printf("Jumped to: %u\n", GP[instr]);
                 break;
             case 0X10:// JMP to a address using I value
                 PC++;
                 instr=readInstruction();
                 PC=instr;
-                printf("Jumped to: %d", instr);
+                printf("Jumped to: %u\n", instr);
                 break;
             case 0x11:// RST instruction
                 reset();
+                printf("Reset.\n");
                 break;
             case 0x12:// Branch if equal
                 PC++;
@@ -191,6 +207,9 @@ int main(int argc, char *argv[])
                 if(A==GP[reg_num])
                 {
                     PC=instr;
+                }
+                else{
+                    PC++;
                 }
                 break;
             case 0x13:// Branch if not equal
@@ -203,6 +222,9 @@ int main(int argc, char *argv[])
                 {
                     PC=instr;
                 }
+                else{
+                    PC++;
+                }
                 break;
             case 0x14:// branch if carry
                 PC++;
@@ -211,6 +233,9 @@ int main(int argc, char *argv[])
                 {
                     PC=instr;
                 }
+                else{
+                    PC++;
+                }
                 break;
             case 0x15:// branch if not carry
                 PC++;
@@ -218,6 +243,9 @@ int main(int argc, char *argv[])
                 if(((RO>>7)&1)==0)
                 {
                     PC=instr;
+                }
+                else{
+                    PC++;
                 }
                 break;
             case 0x16:// branch if greater
@@ -230,6 +258,9 @@ int main(int argc, char *argv[])
                 {
                     PC=instr;
                 }
+                else{
+                    PC++;
+                }
                 break;
             case 0x17:// branch if less
                 PC++;
@@ -241,6 +272,9 @@ int main(int argc, char *argv[])
                 {
                     PC=instr;
                 }
+                else{
+                    PC++;
+                }
                 break;
             case 0x18:// set carry
                 if(((RO>>7)&1)==1)
@@ -248,7 +282,7 @@ int main(int argc, char *argv[])
                     RO=RO^0x80;
                 }
                 PC++;
-                printf("Carry is set.");
+                printf("Carry is set.\n");
                 break;
             case 0x19:// reset carry
                 if(((RO>>7)&1)==0)
@@ -256,9 +290,20 @@ int main(int argc, char *argv[])
                     RO=RO|0x80;
                 }
                 PC++;
-                printf("Carry is reset.");
+                printf("Carry is reset.\n");
                 break;
-            
+            case 0x1A: //envram unimplemented
+                PC++;
+                break;
+            case 0x1B: //enterm unimplemented
+                PC++;
+                break;
+            case 0x1C:
+                printf("HALT\n");
+                exit(0);
+                break;
+
+                
         }
     }
 }
