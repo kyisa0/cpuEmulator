@@ -159,7 +159,7 @@ int main(int argc, char *argv[])
                 A=A*GP[instr];
                 PC++;
                 break;
-            case 0x0D:// NOP instruction
+            case 0x00:// NOP instruction
                 PC++;
                 break;
             case 0x0E:// reverse register (NOT)
