@@ -10,14 +10,14 @@ There is also test programs for testing.
 (Under Development)
 
 
-TODO:
+    TODO:
   
-  *Write the assenbler
+      *Write the assenbler
   
-  *Bugfix
+      *Bugfix
   
-  *Debug terminal
+      *Debug terminal
   
-  *Terminal window for terminal buffer
+      *Terminal window for terminal buffer
   
-  *Memory handling
+      *Memory handling
