@@ -7,6 +7,11 @@ Instructions, uasge and opcodes in the pdf file.
 
 There is also test programs for testing.
 
+
+CPU Speed: configurable
+RAM size: 256 bytes
+Program Counter, Max addressable rom: 256 bytes
+
 (Under Development)
 
 
