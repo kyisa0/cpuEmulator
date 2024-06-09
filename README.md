@@ -17,7 +17,7 @@ Program Counter, Max addressable rom: 256 bytes
 
     TODO:
   
-      ●Write the assenbler
+      ●Write the assembler
   
       ●Bugfix
   
