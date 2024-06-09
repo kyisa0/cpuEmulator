@@ -15,9 +15,9 @@ TODO:
   *Write the assenbler
   
   *Bugfix
-
+  
   *Debug terminal
-
+  
   *Terminal window for terminal buffer
-
+  
   *Memory handling
