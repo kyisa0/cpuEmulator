@@ -21,14 +21,47 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include "asm.h"
 
+settings pc_set;
+
+void print_help()
+{
+    puts("Usage: [file.s] [options]\n"
+         "\t-h, --help\t print this and exit.\n"
+         "\t--reset-non-instr= true\\false\t if true and instruction is unknown reset the cpu.\n"
+         "\t--text-interface= true\\false\t enable text interface, disable gui or disable text and enable gui\n"
+         "\t--receive-key= true\\false\t if enabled receives the keyboard presses\n"
+         "\t--end-in-reset= true\\false\t if enabled when pc counts to last instruction it will reset\n");
+}
 
 
 int main(int argc, char *argv[])
 {
+    char temp[1024];
+    char file_name[64];
     if(!(argc>1))
     {
         printf("Usage: [file.s] [options]");
         return 1;
+    }
+    for(int i=1;i<=argc;i++)
+    {
+        if(argp(argv[i], "-h", "--help"))
+        {
+            print_help();
+        }
+        if(stwth(argv[i], "--reset-non-instr=") && sizeof(argv[i])>18)
+        {
+            
+            strncpy(temp, argv[i]+18, (sizeof(argv[i]-18)));
+            if(strcmp(temp, "true"))
+            {
+                pc_set.rni=true;
+            }
+            else{
+                pc_set.rni=false;
+            }
+        }
     }
 }
