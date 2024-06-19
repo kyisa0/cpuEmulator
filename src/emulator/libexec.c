@@ -32,12 +32,50 @@ void init_pc(uint8_t *pc, FILE* ROM)
     rom=ROM;
 }
 
-uint8_t readInstruction()
+void read_header(char *path, uint8_t *erindc, header_t *header)//read header of file
 {
-    if(fseek(rom, ProgramCounter, SEEK_CUR)!=0)
+    char header_byte;
+    FILE *file=fopen(path, "rb");
+    if(file==NULL)
+    {
+        *erindc=true;
+        return;
+    }
+    fread(header_byte, sizeof(char), 1, file);
+    header->eir=(header_byte>>0)&0b01;// set eir flag
+    header->rk=(header_byte>>1)&0b01;// set rk flag
+    header->rni=(header_byte>>2)&0b01;// set rni flag
+    header->ti=(header_byte>>3)&0b01;// set ti flag
+    fclose(file);
+}
+
+void extract_code(char *path, uint8_t *erindc)//extarcts machine code from .rom file and saves it to a temporary .hex file
+{
+    uint8_t code[256];
+    FILE* rom_file=fopen(path, "rb");
+    FILE* hex_file=fopen("code.hex", "wb");
+    if(rom_file==NULL || hex_file==NULL)
+    {
+        *erindc=true;
+        return;
+    }
+    fseek(rom_file, 1, SEEK_CUR);// skip header
+    fread(code, sizeof(uint8_t), 256, rom_file);
+    fwrite(code, sizeof(uint8_t), 256, hex_file);
+    fclose(rom_file);
+    fclose(hex_file);
+
+}
+
+uint8_t readInstruction()// read instructions from a .hex file
+{
+    uint8_t instruction;
+    if(fseek(rom, ProgramCounter, SEEK_CUR)!=0)// keep file pointer same as program counter
     {
         perror("Program Counter Failed.\n");
         fclose(rom);
         exit(0);
     }
+    fread(instruction, sizeof(uint8_t), 1, rom);// read instruction
+    return instruction;// return instruction
 }

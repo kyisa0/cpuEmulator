@@ -58,19 +58,28 @@ void reset()
 
 int main(int argc, char *argv[])
 {
+    header_t header;
+    uint8_t handle=0;
     FILE *rom;
+    FILE *hex;
     if(!(argc>1))
     {
-        printf("Usage: [hex file]");
+        printf("Usage: [example.rom]");
         return 1;
     }
-    rom=fopen(argv[1], "r");
-    if(rom==NULL)
+    read_header(argv[1], &handle, &header);
+    if(handle==1)
     {
+        printf("error: Failed to read header.\n");
         return 1;
     }
-    init_pc(&PC, rom);
-
+    extract_code(argv[1], &handle);
+    if(handle==1)
+    {
+        printf("error: Falied to extract code.\n");
+    }
+    hex=fopen("code.hex", "rb");
+    init_pc(&PC, &hex);
     while(PC<256)
     {
         instr=readInstruction();// read instruction
@@ -300,10 +309,12 @@ int main(int argc, char *argv[])
                 break;
             case 0x1C:
                 printf("HALT\n");
+                fclose(hex);
                 exit(0);
                 break;
 
                 
         }
     }
+    return 0;
 }

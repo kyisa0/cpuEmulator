@@ -20,8 +20,15 @@
 
 #ifndef EMULATOR_H
 #define EMULATOR_H
-
+#include <stdbool.h>
 void init_pc(uint8_t *pc, FILE *rom);
 uint8_t readInstruction();
-
+typedef struct{
+    bool rni; // reset if non-instruction
+    bool ti; // text interface
+    bool rk; // allocate memory for keybaord buffer
+    bool eir; // reset if pc is 255
+}header_t;
+void read_header(char *path, uint8_t *erindc, header_t *header);
+void extract_code(char *path, uint8_t *erindc);
 #endif
