@@ -22,8 +22,11 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include "asm.h"
+#include <Windows.h>
 
 settings pc_set;
+
+uint8_t instr_opcode[256][3][1];
 
 void print_help()
 {
@@ -45,7 +48,7 @@ int main(int argc, char *argv[])
         printf("Usage: [file.s] [options]");
         return 1;
     }
-    for(int i=1;i<=argc;i++)
+    for(int i=2;i<=argc;i++)
     {
         if(argp(argv[i], "-h", "--help"))
         {
@@ -64,4 +67,16 @@ int main(int argc, char *argv[])
             }
         }
     }
+
+    if(!_access(argv[1], 0))
+    {
+        printf("Error: File doesn't exists\n");
+    }
+
+    FILE* file_code=fopen(argv[1], "r");
+
+    char *f_buffer; 
+    // read and parse the source code assembly file
+
+
 }

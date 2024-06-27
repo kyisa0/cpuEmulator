@@ -54,7 +54,7 @@ void extract_code(char *path, uint8_t *erindc)//extarcts machine code from .rom 
     uint8_t code[256];
     FILE* rom_file=fopen(path, "rb");
     FILE* hex_file=fopen("code.hex", "wb");
-    if(rom_file==NULL || hex_file==NULL) //THIS IS BUG FIX THISSSSS!!!
+    if(rom_file==NULL || hex_file==NULL)
     {
         *erindc=true;
         return;

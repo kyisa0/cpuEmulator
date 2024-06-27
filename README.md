@@ -7,8 +7,6 @@ Instructions, usage and opcodes in the pdf file.
 
 There is also test programs for testing.
 
-(a pdf file that includes CPU instructions, registers, register layout and memory layout information will be added.
-
 
 CPU Speed: configurable
 RAM size: 256 bytes
@@ -19,14 +17,12 @@ Program Counter, Max addressable rom: 256 bytes
 
     TODO:
   
-      ● Write the assembler
+      ●Write the assembler
   
-      ● Bugfix
+      ●Bugfix
   
-      ● Terminal window for terminal buffer
+      ●Debug terminal
   
-      ● Memory handling
-
-      ● Memory Layout
-
-      ● GUI for emulator screen
+      ●Terminal window for terminal buffer
+  
+      ●Memory handling

@@ -24,13 +24,13 @@
 #include "asm.h"
 #include <stdbool.h>
 
-
-_u8 argp(char *source, char *target1, char *target2)
+// string manipulating part
+_u8 argp(char *source, char *target1, char *target2) // Check if argument one of two
 {
     return ((strcmp(source, target1)==0)||(strcmp(source, target2)==0));
 }
 
-_u8 stwth(char *source, char *delimeter)
+_u8 stwth(char *source, char *delimeter) // check if source starts with a spesific delimeter
 {
     _u64 size_s=sizeof(source);
     _u64 size_d=sizeof(delimeter);
@@ -59,3 +59,51 @@ _u8 stwth(char *source, char *delimeter)
         }
     }
 }
+
+
+char *fread_d(char *delimeter, size_t size_del, FILE* file_stream) // file read until delimeter or end of file is met
+{
+    bool found=false;// found indicator
+    char *ptr;// pointer
+    long cur_pos=ftell(file_stream);// start cursor position
+    char ch;// character buffer to hold fgetc return value
+    size_t i_del=0;// index_delimeter holds index of delimeter
+    while((ch=fgetc(file_stream))!=EOF)
+    {
+        if(ch==delimeter[i_del])// compare 
+        {
+            i_del++;
+            if(i_del==size_del)// if index of delimeter equal to size of delimeter 
+            {
+                found=true;// found is true
+                break;
+            }
+        }
+        else if(ch!=delimeter[i_del])// if compare is false
+        {
+            i_del=0;//set del to 0 to start again
+        }
+    }
+    if(found==true)// if found
+    {
+        long end_pos=ftell(file_stream);// get end position
+        ptr=(char *)malloc(sizeof(char)*(end_pos-cur_pos-size_del)+1);// allocate memory with size of calculated number, +1 for null terminator
+
+        if(ptr==NULL)
+        {
+            return NULL;//return error
+        }
+
+        if(fseek(file_stream, cur_pos, SEEK_SET)!=0)
+        {
+            return NULL;//return error
+        }
+
+        fread(ptr, sizeof(char), end_pos-cur_pos-size_del, file_stream);// +1 for null terminator
+        ptr[end_pos-cur_pos-1]='\0';
+        return ptr;// return allocated and formatted output
+    }
+}
+
+
+// end of string manipulating part
